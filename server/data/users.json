@@ -1,0 +1,14 @@
+[
+  {
+    "id": "123456",
+    "name": "fake",
+    "accunts": [
+      "a12",
+      "b13",
+      "n9xlqkl4hc92ju",
+      "n9xbacl4hc9rry",
+      "n9xhu0l4hcaebk"
+    ]
+  },
+  { "id": "1234567", "name": "fake-2", "accunts": ["cc4"] }
+]
