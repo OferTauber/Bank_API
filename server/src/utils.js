@@ -83,11 +83,60 @@ const withdraw = (accaountId, cashToWithdraw) => {
 
   const accaount = accaountsList[accountIndex];
   accaount.cash -= cashToWithdraw;
-  if (accaount.cash < accaount.credit)
+  if (accaount.cash + accaount.credit < 0)
     return `Failed to withdraw money - exceeded the credit limit`;
 
   saveAccaunts(accaountsList);
   return accaount;
+};
+
+const transfer = (payerAccountId, payeeAccountId, amount) => {
+  if (payerAccountId === payeeAccountId) return 'Payer and payee are identical';
+
+  const returnValWithdraw = withdraw(payerAccountId, amount);
+  if (!dataIsValid(returnValWithdraw)) return returnValWithdraw;
+
+  const returnValDeposit = deposit(payeeAccountId, amount);
+  if (!dataIsValid(returnValDeposit)) {
+    deposit(payerAccountId, amount);
+  }
+  return returnValDeposit;
+};
+
+const updateCredit = (accaountId, newCredit) => {
+  console.log(accaountId);
+  if (!newCredit || typeof newCredit !== 'number' || newCredit < 0)
+    return `Invalid credit ${newCredit}`;
+
+  const accaountsList = getAllAccauntsFromJSON();
+  const accaount = accaountsList.find(
+    (accaountFromList) => accaountFromList.id === accaountId
+  );
+  if (!accaount) return `No accaount found with ID ${accaountId}`;
+
+  accaount.credit = newCredit;
+  if (accaount.cash + accaount.credit < 0)
+    return 'The new credit line is smaller than the existing debt in the account - you must first deposit money or choose a larger line.';
+
+  saveAccaunts(accaountsList);
+  return accaount;
+};
+
+const addUser = (id, name, cash, credit) => {
+  const usersList = getAllUsersFromJSON();
+  if (usersList.find((user) => user.id === id))
+    return 'A user with such an ID already exists';
+  const newUser = {
+    id,
+    name,
+    accunts: [],
+  };
+
+  usersList.push(newUser);
+  saveUsers(usersList);
+
+  const retanVal = openNewAccaunt(id, cash, credit);
+  return dataIsValid(retanVal) ? newUser : retanVal;
 };
 
 const utils = {
@@ -98,6 +147,9 @@ const utils = {
   openNewAccaunt,
   deposit,
   withdraw,
+  transfer,
+  updateCredit,
+  addUser,
 };
 
 module.exports = utils;

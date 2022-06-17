@@ -2,7 +2,7 @@ const express = require('express');
 const route = express.Router();
 const utils = require('./utils');
 
-//todo Add user
+// Add user
 {
   // Can add user (personn) to the bank and imidiatly open a new accaount
   // User has the following:
@@ -12,6 +12,20 @@ const utils = require('./utils');
   //?   invalid name
   //?   invalid credit (less then 0)
 }
+route.post('/new_user', (req, res) => {
+  const { id, name, cash, credit } = req.body;
+  try {
+    const returnVal = utils.addUser(id, name, cash, credit);
+    if (utils.dataIsValid(returnVal)) {
+      res.status(200).send(returnVal);
+    } else {
+      res.status(400).send(returnVal);
+    }
+  } catch (e) {
+    console.warn(e);
+    res.status(400).send(e);
+  }
+});
 
 // Open account
 {
@@ -60,7 +74,7 @@ route.put('/deposit/', (req, res) => {
   }
 });
 
-//todo Update credit
+// Update credit
 {
   // Can update an accunt credit (only positive numbers)
   // need: account id, credit
@@ -69,6 +83,21 @@ route.put('/deposit/', (req, res) => {
   //?   invalid credit (less then 0)
   //?   invalid credit (less then the current balance)
 }
+route.put('/update_credit/', (req, res) => {
+  try {
+    const accountId = req.body;
+    const { credit } = req.query;
+    const accaount = utils.updateCredit(accountId, credit * 1);
+    if (utils.dataIsValid(accaount)) {
+      res.status(200).send(accaount);
+    } else {
+      res.status(400).send(accaount);
+    }
+  } catch (e) {
+    console.warn(e);
+    res.status(400).send(e);
+  }
+});
 
 // Withdraw money
 {
@@ -95,7 +124,7 @@ route.put('/withdraw/', (req, res) => {
   }
 });
 
-//todo Transferring
+// Transferring
 {
   // Can transfer money from one account to another with credit(can
   // transfer money until the cash and credit run out)
@@ -106,6 +135,22 @@ route.put('/withdraw/', (req, res) => {
   //?   payer is out of credit
   //?   invalid transfer amount (less then 0)
 }
+route.put('/transfer/', (req, res) => {
+  try {
+    const { payer, payee } = req.body;
+    const { amount } = req.query;
+
+    const retanVal = utils.transfer(payer, payee, amount * 1);
+    if (utils.dataIsValid(retanVal)) {
+      res.status(200).send(retanVal);
+    } else {
+      res.status(400).send(retanVal);
+    }
+  } catch (e) {
+    console.warn(e);
+    res.status(400).send(e);
+  }
+});
 
 // Show details of account
 {
@@ -160,12 +205,6 @@ route.get('/all_users', (req, res) => {
     console.warn(e);
     res.status(400).send(e);
   }
-});
-
-// ! temp!!!!
-route.get('/', (req, res) => {
-  void req;
-  res.send('hi!');
 });
 
 module.exports = route;
