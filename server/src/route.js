@@ -177,4 +177,9 @@ route.get('/all_users', (req, res) => {
   }
 });
 
+app.get('/*', (req, res) => {
+  void req;
+  res.sendFile(path.join(__dirname + '../client/build/index.html'));
+});
+
 module.exports = route;
