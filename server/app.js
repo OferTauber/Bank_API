@@ -10,8 +10,9 @@ const app = express();
 app.use(cors());
 app.use(express.text());
 app.use(express.json());
-app.use('/', route);
 app.use(express.static(path.resolve(__dirname, '../client/build')));
+app.use('/', route);
+console.log(path.resolve(__dirname, '../client/build'));
 
 app.listen(PORT, (req, res) => {
   void req, res;

@@ -180,7 +180,10 @@ route.get('/all_users', (req, res) => {
 
 route.get('/*', (req, res) => {
   void req;
-  res.sendFile(path.join(__dirname + '../client/build/index.html'));
+
+  console.log('1: ', path.join(__dirname + '../../client/build/index.html'));
+  console.log('2: ', path.join(__dirname + '/../../client/build/index.html'));
+  res.sendFile(path.join(__dirname, '../../client/build/index.html'));
 });
 
 module.exports = route;
