@@ -11,7 +11,7 @@ const sendReqwest = async (type, route, params) => {
       url: URL + route,
       params: params.params,
       data: params.json,
-      timeout: 300,
+      timeout: 3000,
     });
   } catch (err) {
     console.warn(err);
