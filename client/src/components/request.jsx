@@ -67,7 +67,7 @@ const Request = ({ config, passDataToParent }) => {
   };
 
   return (
-    <div className="ui container">
+    <div className="ui vertical segment">
       <br />
       <br />
       <form

@@ -127,15 +127,15 @@ function App() {
 
   return (
     <div className="App">
-      {mapUsers()}
+      <br />
       <div className="ui container">
-        <br />
-        <br />
-        <div>
+        <div className="ui raised segment sticky">
           <h3>Return value:</h3>
-
-          <div className="field">{returnVal}</div>
+          <div>{returnVal}</div>
         </div>
+        <br />
+        <br />
+        {mapUsers()}
       </div>
     </div>
   );

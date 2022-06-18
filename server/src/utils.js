@@ -65,6 +65,7 @@ const deposit = (accaountId, cashToDeposit) => {
   if (-1 === accountIndex) return `No account found with ID ${accaountId}`;
 
   accaountsList[accountIndex].cash += cashToDeposit;
+  if (!accaountsList[accountIndex].cash) accaountsList[accountIndex].cash = 0;
 
   saveAccaunts(accaountsList);
   return accaountsList[accountIndex];
