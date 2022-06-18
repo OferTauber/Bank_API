@@ -1,5 +1,5 @@
 import axios from 'axios';
-const URL = process.env.PORT ? '' : 'http://localhost:5000';
+const URL = process.env.PORT ?? 'http://localhost:5000';
 
 const sendReqwest = async (type, route, params) => {
   try {
