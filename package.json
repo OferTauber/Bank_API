@@ -5,10 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": " nodemon server/app.js"
+    "server": "nodemon server/app.js",
+    "client": "npm start --prefix client",
+    "start": "npm run server && npm run client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
-  "author": "",
+  "author": "Ofer Tauber",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.27.2",

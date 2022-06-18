@@ -2,9 +2,9 @@ const express = require('express');
 const route = express.Router();
 const utils = require('./utils');
 
-// Add user
+//! Add user
 {
-  // Can add user (personn) to the bank and imidiatly open a new accaount
+  // Can add user (person) to the bank and imidiatly open a new accaount
   // User has the following:
   // passport id (Uniqe, to be provided), name, cash(default 0), credit(default 0)
   //? cases:
@@ -16,18 +16,14 @@ route.post('/new_user', (req, res) => {
   const { id, name, cash, credit } = req.body;
   try {
     const returnVal = utils.addUser(id, name, cash, credit);
-    if (utils.dataIsValid(returnVal)) {
-      res.status(200).send(returnVal);
-    } else {
-      res.status(400).send(returnVal);
-    }
+    res.status(200).send(returnVal);
   } catch (e) {
     console.warn(e);
     res.status(400).send(e);
   }
 });
 
-// Open account
+//! Open account
 {
   // Create new accunt to an exiting user
   // need: user id, , cash(default 0), credit(default 0)
@@ -38,19 +34,15 @@ route.post('/new_user', (req, res) => {
 route.put('/new_account', (req, res) => {
   const { cash, credit } = req.query;
   try {
-    const returnVal = utils.openNewaccaount(req.body, cash * 1, credit * 1);
-    if (utils.dataIsValid(returnVal)) {
-      res.status(200).send(returnVal);
-    } else {
-      res.status(400).send(returnVal);
-    }
+    const returnVal = utils.openNewAccaunt(req.body.user, cash * 1, credit * 1);
+    res.status(200).send(returnVal);
   } catch (e) {
     console.warn(e);
     res.status(400).send(e);
   }
 });
 
-// Depositing
+//! Depositing
 {
   // Can deposit cash to an account.
   // need: account id, amount of cash
@@ -60,21 +52,17 @@ route.put('/new_account', (req, res) => {
 }
 route.put('/deposit/', (req, res) => {
   try {
-    const accountId = req.body;
+    const { accountId } = req.body;
     const { amount } = req.query;
     const accaount = utils.deposit(accountId, amount * 1);
-    if (utils.dataIsValid(accaount)) {
-      res.status(200).send(accaount);
-    } else {
-      res.status(400).send(accaount);
-    }
+    res.status(200).send(accaount);
   } catch (e) {
     console.warn(e);
     res.status(400).send(e);
   }
 });
 
-// Update credit
+//! Update credit
 {
   // Can update an accunt credit (only positive numbers)
   // need: account id, credit
@@ -85,21 +73,16 @@ route.put('/deposit/', (req, res) => {
 }
 route.put('/update_credit/', (req, res) => {
   try {
-    const accountId = req.body;
-    const { credit } = req.query;
+    const { accountId, credit } = req.body;
     const accaount = utils.updateCredit(accountId, credit * 1);
-    if (utils.dataIsValid(accaount)) {
-      res.status(200).send(accaount);
-    } else {
-      res.status(400).send(accaount);
-    }
+    res.status(200).send(accaount);
   } catch (e) {
     console.warn(e);
     res.status(400).send(e);
   }
 });
 
-// Withdraw money
+//! Withdraw money
 {
   // Can withdraw money from an accunt
   // need: account id, amount to withdraw
@@ -110,21 +93,20 @@ route.put('/update_credit/', (req, res) => {
 }
 route.put('/withdraw/', (req, res) => {
   try {
-    const accountId = req.body;
-    const { amount } = req.query;
+    const { accountId, amount } = req.body;
+    // const { amount } = req.query;
+    console.log(req.query);
+    console.log(amount);
+    console.log(typeof amount);
     const accaount = utils.withdraw(accountId, amount * 1);
-    if (utils.dataIsValid(accaount)) {
-      res.status(200).send(accaount);
-    } else {
-      res.status(400).send(accaount);
-    }
+    res.status(200).send(accaount);
   } catch (e) {
     console.warn(e);
     res.status(400).send(e);
   }
 });
 
-// Transferring
+//! Transfer
 {
   // Can transfer money from one account to another with credit(can
   // transfer money until the cash and credit run out)
@@ -137,64 +119,52 @@ route.put('/withdraw/', (req, res) => {
 }
 route.put('/transfer/', (req, res) => {
   try {
-    const { payer, payee } = req.body;
-    const { amount } = req.query;
+    const { payer, payee, amount } = req.body;
 
     const retanVal = utils.transfer(payer, payee, amount * 1);
-    if (utils.dataIsValid(retanVal)) {
-      res.status(200).send(retanVal);
-    } else {
-      res.status(400).send(retanVal);
-    }
+    res.status(200).send(retanVal);
   } catch (e) {
     console.warn(e);
     res.status(400).send(e);
   }
 });
 
-// Show details of account
+//! Show details of account
 {
   // Can fetch all details of a particular account
   // need: account id
   //? cases:
   //?   account not exist
 }
-route.get('/accaount', (req, res) => {
+route.put('/accaount', (req, res) => {
+  const { accaountId } = req.body;
   try {
-    const accaount = utils.getaccaount(req.body);
-    if (utils.dataIsValid(accaount)) {
-      res.status(200).send(accaount);
-    } else {
-      res.status(400).send(accaount);
-    }
+    const accaount = utils.getAccaunt(accaountId);
+    res.status(200).send(accaount);
   } catch (e) {
     console.warn(e);
     res.status(400).send(e);
   }
 });
 
-// Show details of user
+//! Show details of user
 {
   // Can fetch all details of a particular user
   // need: user id
   //? cases:
   //?   user not exist
 }
-route.get('/user', (req, res) => {
+route.put('/user', (req, res) => {
   try {
-    const user = utils.getUser(req.body);
-    if (utils.dataIsValid(user)) {
-      res.status(200).send(user);
-    } else {
-      res.status(400).send(user);
-    }
+    const user = utils.getUser(req.body.user);
+    res.status(200).send(user);
   } catch (e) {
     console.warn(e);
     res.status(400).send(e);
   }
 });
 
-// Show details of all users
+//! Show details of all users
 // Can fetch all details of all the users
 route.get('/all_users', (req, res) => {
   void req;
