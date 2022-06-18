@@ -1,6 +1,8 @@
 import axios from 'axios';
 const URL =
-  process.env.NODE_ENV === 'production' ? '/' : 'http://localhost:5000';
+  process.env.NODE_ENV === 'production'
+    ? 'https://ofer-bank-app.herokuapp.com'
+    : 'http://localhost:5000';
 
 const sendReqwest = async (type, route, params) => {
   try {
