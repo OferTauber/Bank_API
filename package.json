@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon server/app.js",
     "client": "npm start --prefix client",
-    "start": "npm run server && npm run client",
+    "start": "npm run server & npm run client & wait -n",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
