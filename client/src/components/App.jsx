@@ -98,15 +98,6 @@ function App() {
       },
       route: '/user',
     },
-    {
-      name: 'All users details',
-      type: 'get',
-      params: {
-        json: {},
-        query: {},
-      },
-      route: '/all_users',
-    },
   ];
 
   const captureDataFromChild = (data) => {
